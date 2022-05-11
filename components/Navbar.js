@@ -4,7 +4,7 @@ const NavItem = ({ text, active=false }) => {
     const activeClasses = " bg-yellow-400 text-white";
     const hoverClasses = " ";
 
-    return <li className={"px-4 py-2 mx-2 text-xl font-light rounded-full "
+    return <li className={"px-4 py-2 md:mx-2 text-xl font-light rounded-full "
         + "hover:bg-yellow-300 hover:text-white hover:cursor-pointer" + (active ? activeClasses : "")}>{text}</li>;
 };
 
@@ -12,9 +12,9 @@ const Navbar = () => {
     const { search, setSearch } = useSearchContext();
 
     return (
-        <nav className="text-gray-200 bg-zinc-800 shadow-lg w-full h-fit flex
-            justify-between items-center px-5">
-            <h1 className="font-bold text-2xl">
+        <nav className="text-gray-200 bg-zinc-800 shadow-lg w-full h-fit flex flex-col md:flex-row
+            md:justify-between md:items-center px-2 md:px-5">
+            <h1 className="font-bold text-2xl p-2">
                 Fornite<span className="text-yellow-400">CMS</span>
             </h1>
             <ul className="flex">
@@ -22,7 +22,7 @@ const Navbar = () => {
                 <NavItem text="Top 10"/>
                 <NavItem text="Top 25"/>
             </ul>
-            <section className="container py-4 flex w-fit mx-4">
+            <section className="container py-4 flex w-fit mx-2 md:mx-4">
                 <div className="flex border-2 rounded">
                     <button className="flex items-center justify-center px-4 border-r bg-gray-900">
                         <svg className="w-6 h-6 text-neutral-100" fill="currentColor"

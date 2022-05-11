@@ -1,11 +1,11 @@
 const VideoItem = ({ metadata: { name, poster } }) => {
     return (
-        <div className="w-1/4 rounded-lg cursor-pointer">
+        <div className="w-3/4 md:w-1/2 mx-auto my-8 lg:w-1/4 rounded-lg cursor-pointer">
             <div className="h-4/5 relative group hover:scale-105 ease-in duration-300 overflow-x">
                 <img src={poster} alt={name} className="rounded-lg h-full w-full"/>
-                <div className="group-hover:block hidden h-full bg-stone-900/75 absolute bottom-0
-                    w-full rounded-lg">
-                        <button className="bottom-[102px] right-[110px] absolute">
+                <div className="group-hover:flex hidden h-full bg-stone-900/75 absolute bottom-0
+                    w-full rounded-lg justify-center items-center">
+                        <button>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-20 w-20 block hover:text-yellow-400 cursor-pointer"
