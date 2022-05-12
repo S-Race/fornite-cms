@@ -1,11 +1,19 @@
-const VideoItem = ({ metadata: { name, poster } }) => {
+import { useState } from "react";
+
+import VideoDialog from "./VideoDialog";
+
+const VideoItem = ({ metadata: { name, poster, _id } }) => {
+    const [showVideo, setShowVideo] = useState(false);
+
     return (
-        <div className="w-3/4 md:w-1/2 mx-auto my-8 lg:w-1/4 rounded-lg cursor-pointer">
-            <div className="h-4/5 relative group hover:scale-105 ease-in duration-300 overflow-x">
+        <div className="w-3/4 md:w-1/2 mx-auto my-8 lg:w-1/4 rounded-lg cursor-pointer" key={_id}>
+            { showVideo && <VideoDialog video={_id} start={showVideo} poster={poster} name={name}
+                onClose={() => setShowVideo(false)}/> }
+            <div className="relative group hover:scale-105 ease-in duration-300 overflow-x">
                 <img src={poster} alt={name} className="rounded-lg h-full w-full"/>
                 <div className="group-hover:flex hidden h-full bg-stone-900/75 absolute bottom-0
                     w-full rounded-lg justify-center items-center">
-                        <button>
+                        <button onClick={() => setShowVideo(true)}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-20 w-20 block hover:text-yellow-400 cursor-pointer"

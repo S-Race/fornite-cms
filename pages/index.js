@@ -30,7 +30,7 @@ export default function Home({ featuredItems }) {
                     </section>
 
                     <section className="flex flex-col lg:flex-row md:justify-between md:mx-16 mx-4 mb-6">
-                        { featuredItems?.map(item => <VideoItem metadata={item} key={item.id}/>) }
+                        { featuredItems?.map(item => <VideoItem metadata={item}/>) }
                     </section>
                 </main>
             </SearchProvider>

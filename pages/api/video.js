@@ -42,6 +42,43 @@ const addVideo = async (req, res) => {
     else return res.status(500).json({ msg: "An error occurred when trying to add video" });
 }
 
+const getVideoStream = async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) return res.status(400).json({ msg: "no video id" });
+    const video = await Video.findById(id).exec();
+
+    const { create: createYoutubeDl } = require("yt-dlp-exec");
+    const ytdlp = createYoutubeDl("yt-dlp");
+
+
+    let json = await ytdlp(video.url, {
+        dumpSingleJson: true,
+        noWarnings: true,
+        noCallHome: true,
+        noCheckCertificate: true,
+        preferFreeFormats: true,
+        youtubeSkipDashManifest: true,
+    });
+
+    if (!json)
+        return res.status(404).send({ stream: "" });
+
+    let videoCandidates = json.formats.filter(format => format.protocol === "https");
+    let highest = videoCandidates[0];
+
+    if (videoCandidates.length < 1)
+        return res.status(400).send({ stream: "", msg: "can't get a video url with http protocol" });
+
+    for(let i = 1; i < videoCandidates.length; i++)
+        highest = videoCandidates[i].height > highest.height ? videoCandidates[i] : highest;
+
+    // return res.status(200).json({ formats: json.formats });
+    const audioStream = json.formats.filter(format => format.protocol === "https" && format.acodec !== "none")[0];
+
+    return res.status(200).json({ audioStream: audioStream.url, videoStream: highest.url });
+};
+
 const handler = async (req, res) => {
     if (req.method === "POST") {
         try {
@@ -50,7 +87,16 @@ const handler = async (req, res) => {
             return res.status(500).json({ msg: e.message });
         }
     }
-    else return res.status(405).json({ msg: "Bad Method" });
+
+    if (req.method === "GET") {
+        try {
+            return await getVideoStream(req, res);
+        } catch (e) {
+            return res.status(500).json({ msg: e.message, stream: "" });
+        }
+    }
+
+    return res.status(405).json({ msg: "Bad Method" });
 }
 
 export default connectDB(handler);
