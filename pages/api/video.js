@@ -1,11 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { connectDB } from "../../middleware/mongodb";
+import Player from "../../models/player";
+import Video from "../../models/video";
 
 const findOrCreateUser = async (username) => {
-    let playerRecord = await prisma.player.findUnique({ where: { username } });
-    if (!playerRecord)
-        playerRecord = await prisma.player.create({ data: { username } });
-    return playerRecord.id;
+    let player = await Player.find({ username }).exec();
+    if (!player || player.length < 1) {
+        // create the user
+        const newPlayer = new Player({ username });
+        player = await newPlayer.save();
+        if (player !== newPlayer)
+            throw new Error("Failed to create player");
+    }
+
+    return player.id;
 };
 
 const addVideo = async (req, res) => {
@@ -14,7 +21,7 @@ const addVideo = async (req, res) => {
     if (!url) return res.status(400).json({ msg: "Missing video url" });
     if (!name) return res.status(400).json({ msg: "Missing video name" });
     if (!poster) return res.status(400).json({ msg: "Missing poster url" });
-    if (!kills) return res.status(400).json({ msg: "Missing number of kills" });
+    if (!kills && kills !== 0) return res.status(400).json({ msg: "Missing number of kills" });
     if (!player) return res.status(400).json({ msg: "Missing player name" });
     if (!mode) return res.status(400).json({ msg: "Missing mode" });
 
@@ -27,16 +34,15 @@ const addVideo = async (req, res) => {
     let playerId = await findOrCreateUser(player);
     const uploadDate = (new Date(Date.now()));
 
-    const video = await prisma.video.create({
-        data: { url, name, poster, placement, kills, playerId, squadMembers, mode, uploadDate },
-    });
+    const video = new Video({ url, name, poster, placement, kills, playerId, squadMembers, mode, uploadDate });
+    let savedVideo = video.save();
 
-    if (video)
+    if (savedVideo !== video)
         return res.status(201).json({ msg: `Add video "${video.name}" successfully`});
     else return res.status(500).json({ msg: "An error occurred when trying to add video" });
 }
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     if (req.method === "POST") {
         try {
             return await addVideo(req, res);
@@ -46,3 +52,5 @@ export default async function handler(req, res) {
     }
     else return res.status(405).json({ msg: "Bad Method" });
 }
+
+export default connectDB(handler);

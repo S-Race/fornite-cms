@@ -71,9 +71,11 @@ const AddVideoDialog = ({ onClose }) => {
     const add = async (e) => {
         e.preventDefault();
         const result = await requestSync({ url: "/api/video", method: "POST", body: JSON.stringify({ ...video }) });
-        alert(result.msg);
-        if (result.sucess)
+
+        if (result.success) {
+            alert(result.json.msg);
             onClose(true);
+        } else alert(result.msg);
     };
 
     return (
@@ -90,7 +92,7 @@ const AddVideoDialog = ({ onClose }) => {
                     placeholder="fornite-boss"/>
                 <NumberInput label="Placement" value={video.placement} update={updateForm} name="placement"
                     min={1} max={100}/>
-                <NumberInput label="Kills" value={video.kills} update={updateForm} name="kills"  min={0} max={99}/>
+                <NumberInput label="Kills" value={video.kills} update={updateForm} name="kills" min={0} max={99}/>
                 <SelectInput label="Mode" value={video.mode} update={updateForm} name="mode" choices={modes}/>
                 { video.squad.map((squadMember, i) => (<div className="flex justify-between items-center">
                         <TextInput key={i} label={"Squad Member " + (i + 1)} value={squadMember} update={updateForm}

@@ -38,17 +38,12 @@ export default function Home({ featuredItems }) {
     )
 }
 
-import { PrismaClient } from "@prisma/client";
+import { createConnection } from "../middleware/mongodb";
+import Video from "../models/video";
 
 export async function getServerSideProps() {
-    const prisma = new PrismaClient();
-
-    const videos = await prisma.video.findMany({
-        where: {
-            placement: { lt: 5 }
-        },
-        // include: { player: true }
-    });
+    const videos = await Video.find({ placement: { $lt: 5 }});
+    if (!videos) return { props: { featuredItems: [] } };
 
     let candidates = videos.filter(v => v.placement === 1);
     let lt = 3;
@@ -57,7 +52,7 @@ export async function getServerSideProps() {
         lt++;
         if (lt === 6) break;
     }
-    const featuredItems = candidates.slice(0, 3);
+    const featuredItems = JSON.parse(JSON.stringify(candidates.slice(0, 3)));
 
     return {
         props: {
