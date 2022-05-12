@@ -30,7 +30,7 @@ export default function Home({ featuredItems }) {
                     </section>
 
                     <section className="flex flex-col lg:flex-row md:justify-between md:mx-16 mx-4 mb-6">
-                        { featuredItems?.map(item => <VideoItem metadata={item}/>) }
+                        { featuredItems?.map(item => <VideoItem metadata={item} key={item.id}/>) }
                     </section>
                 </main>
             </SearchProvider>
@@ -38,23 +38,30 @@ export default function Home({ featuredItems }) {
     )
 }
 
+import { PrismaClient } from "@prisma/client";
 
 export async function getServerSideProps() {
+    const prisma = new PrismaClient();
+
+    const videos = await prisma.video.findMany({
+        where: {
+            placement: { lt: 5 }
+        },
+        // include: { player: true }
+    });
+
+    let candidates = videos.filter(v => v.placement === 1);
+    let lt = 3;
+    while(candidates.length < 3) {
+        candidates = videos.filter(v => v.placement < lt)
+        lt++;
+        if (lt === 6) break;
+    }
+    const featuredItems = candidates.slice(0, 3);
+
     return {
         props: {
-            featuredItems: [{
-                name: "Fornite 2022-05-12",
-                poster: "https://picsum.photos/500?blur=8&id=0",
-                id: 0
-            }, {
-                name: "Fornite 2022-05-02",
-                poster: "https://picsum.photos/500?blur=8&id=1",
-                id: 1
-            }, {
-                name: "Fornite 2022-05-08",
-                poster: "https://picsum.photos/500?blur=8&id=2",
-                id: 2
-            }]
+            featuredItems
         }
     };
 };

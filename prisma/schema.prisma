@@ -1,0 +1,29 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model Video {
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    name          String
+    uploadDate    DateTime?
+    poster        String?   @default("")
+    placement     Int       @db.Int
+    kills         Int?      @db.Int @default(0)
+    player        Player    @relation(name: "playedBy", fields: [playerId], references: [id])
+    playerId      String    @db.ObjectId
+    squadMembers  String[]  @db.ObjectId // players who were on the team (if applicable)
+    mode          Int? // an int to represent solo, duo, trio or squad
+    url           String
+}
+
+model Player {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    username    String
+    avatar      String?  @default("")
+    videos      Video[]  @relation(name: "playedBy")
+}
