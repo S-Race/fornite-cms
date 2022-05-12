@@ -10,20 +10,20 @@ datasource db {
 model Video {
     id            String    @id @default(auto()) @map("_id") @db.ObjectId
     name          String
-    uploadDate    DateTime?
+    uploadDate    String?
     poster        String?   @default("")
     placement     Int       @db.Int
     kills         Int?      @db.Int @default(0)
     player        Player    @relation(name: "playedBy", fields: [playerId], references: [id])
     playerId      String    @db.ObjectId
     squadMembers  String[]  @db.ObjectId // players who were on the team (if applicable)
-    mode          Int? // an int to represent solo, duo, trio or squad
-    url           String
+    mode          Int?      // an int to represent solo, duo, trio or squad
+    url           String    @unique
 }
 
 model Player {
     id          String   @id @default(auto()) @map("_id") @db.ObjectId
-    username    String
+    username    String   @unique
     avatar      String?  @default("")
     videos      Video[]  @relation(name: "playedBy")
 }
