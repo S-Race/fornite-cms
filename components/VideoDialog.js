@@ -21,11 +21,26 @@ const VideoDialog = ({ video, start, poster, onClose }) => {
     }, [start]);
 
     useEffect(() => {
-        // TODO also sync the seek
-        if (videoElement.current) {
-            videoElement.current.onplay = () => audioElement?.current?.play();
-            videoElement.current.onpause = () => audioElement?.current?.pause();
+        const playAudio = () => audioElement?.current?.play();
+        const pauseAudio = () => audioElement?.current?.pause();
+        const seekAudio = () => audioElement.current.currentTime = videoElement.current.currentTime;
+
+        const removeListeners = () => {
+            if (!videoElement.current) return;
+            videoElement.current.removeEventListener("play", playAudio);
+            videoElement.current.removeEventListener("pause", pauseAudio);
+            videoElement.current.removeEventListener("seeked", seekAudio);
         }
+
+        if (videoElement.current) {
+            removeListeners(); // remove listeners that may have existed previously before adding
+
+            videoElement.current.addEventListener("play", playAudio);
+            videoElement.current.addEventListener("pause", pauseAudio);
+            videoElement.current.addEventListener("seeked", seekAudio);
+        }
+
+        return removeListeners; // clean up
     }, [videoElement.current]);
 
     if (start && videoSource?.video?.length > 0)

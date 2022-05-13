@@ -102,16 +102,17 @@ const AddVideoDialog = ({ onClose }) => {
                     </div>))
                 }
                 <footer className="flex justify-between mt-8">
-                    <button onClick={addSquad} className="p-2 bg-green-400 hover:bg-green-500 rounded-md flex">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 stroke-neutral-200" fill="none"
-                            viewBox="0 0 24 24" strokeWidth="2">
+                    <button onClick={addSquad} className="p-1 md:p-2 bg-green-400 hover:bg-green-500 rounded-md flex
+                        text-sm md:text-lg items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 stroke-neutral-200"
+                            fill="none" viewBox="0 0 24 24" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                         <span className="ml-1">Add Squad Member</span>
                     </button>
                     <div className="flex space-x-2">
-                        <button onClick={() => onClose(false)} className="px-4 py-2 bg-red-500 hover:bg-red-600
-                            rounded-md flex">
+                        <button onClick={() => onClose(false)} className="px-2 py-1 md:px-4 md:py-2 bg-red-500
+                            hover:bg-red-600 rounded-md flex text-sm md:text-lg items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                 className="h-6 w-6 fill-neutral-200">
                                 <path d="M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0
@@ -122,9 +123,10 @@ const AddVideoDialog = ({ onClose }) => {
                             </svg>
                             <span className="ml-2">Cancel</span>
                         </button>
-                        <button className="px-4 py-2 bg-green-400 hover:bg-green-500 rounded-md flex" onClick={add}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 stroke-neutral-200" fill="none"
-                                viewBox="0 0 24 24" strokeWidth="2">
+                        <button className="px-2 py-1 md:px-4 md:py-2 bg-green-400 hover:bg-green-500 rounded-md flex
+                            text-sm md:text-lg items-center" onClick={add}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 stroke-neutral-200"
+                                fill="none" viewBox="0 0 24 24" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121
                                     8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2
                                     2v8a2 2 0 002 2z" />
