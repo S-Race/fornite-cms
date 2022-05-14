@@ -48,6 +48,18 @@ const getVideoStream = async (req, res) => {
     if (!id) return res.status(400).json({ msg: "no video id" });
     const video = await Video.findById(id).exec();
 
+    const YOUTUBE_REGEX = /https?\:\/\/(?:www[.])?(?:youtube[.]com\/watch[?]v=(\S+)|youtu[.]be\/(\S+))/
+    let matches = video.url.match(YOUTUBE_REGEX);
+
+    let youtube_id = matches && (matches[1] || matches[2]);
+
+    if (youtube_id)
+        return res.status(200).json({
+            videoStream: "https://www.youtube-nocookie.com/embed/" + youtube_id,
+            youtube: true
+        });
+
+    console.log("Not youtube");
     const { create: createYoutubeDl } = require("yt-dlp-exec");
     const ytdlp = createYoutubeDl("yt-dlp");
 
@@ -62,7 +74,7 @@ const getVideoStream = async (req, res) => {
     });
 
     if (!json)
-        return res.status(404).send({ stream: "" });
+        return res.status(404).send({ videoStream: "" });
 
     let videoCandidates = json.formats.filter(format => format.protocol === "https");
     let highest = videoCandidates[0];
@@ -92,7 +104,7 @@ const handler = async (req, res) => {
         try {
             return await getVideoStream(req, res);
         } catch (e) {
-            return res.status(500).json({ msg: e.message, stream: "" });
+            return res.status(500).json({ msg: e.message, videoStream: "" });
         }
     }
 

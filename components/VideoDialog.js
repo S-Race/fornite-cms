@@ -4,22 +4,9 @@ import { requestSync } from "../hooks/Fetch";
 import Modal from "./Modal";
 import Loader from "./Loader";
 
-const VideoDialog = ({ video, start, poster, onClose }) => {
+const VideoPlayer = ({ poster, videoSource }) => {
     const videoElement = useRef();
     const audioElement = useRef();
-
-    const [videoSource, setVideoSource] = useState({ video: "", audio: "" });
-
-    const getVideoSource = async () => {
-        const result = await requestSync({ url: "/api/video?id=" + video });
-        const { json: { videoStream, audioStream } } = result;
-        setVideoSource({ video: videoStream, audio: audioStream });
-    };
-
-    useEffect(() => {
-        if (start)
-            getVideoSource();
-    }, [start]);
 
     useEffect(() => {
         const playAudio = () => audioElement?.current?.play();
@@ -44,16 +31,41 @@ const VideoDialog = ({ video, start, poster, onClose }) => {
         return removeListeners; // clean up
     }, [videoElement.current]);
 
+    return (
+        <video poster={poster} autoPlay controls ref={videoElement}
+            className="w-full md:w-4/5 max-h-screen rounded-md bg-neutral-900">
+            <source src={videoSource.video} type="video/mp4" />
+            <audio autoPlay ref={audioElement}>
+                <source src={videoSource.audio}/>
+            </audio>
+        </video>
+    )
+}
+
+const VideoDialog = ({ video, start, poster, onClose }) => {
+    const [videoSource, setVideoSource] = useState({ video: "", audio: "" });
+
+    const getVideoSource = async () => {
+        const result = await requestSync({ url: "/api/video?id=" + video });
+        const { json: { videoStream, audioStream, youtube } } = result;
+        setVideoSource({ video: videoStream, audio: audioStream, youtube });
+    };
+
+    useEffect(() => {
+        if (start)
+            getVideoSource();
+    }, [start]);
+
     if (start && videoSource?.video?.length > 0) {
         return (
             <Modal onClose={() => onClose(false)} center>
-                <video poster={poster} autoPlay controls ref={videoElement}
-                    className="w-full md:w-4/5 max-h-screen rounded-md bg-neutral-900">
-                    <source src={videoSource.video} type="video/mp4" />
-                    <audio autoPlay ref={audioElement}>
-                        <source src={videoSource.audio}/>
-                    </audio>
-                </video>
+                { !videoSource.youtube && <VideoPlayer poster={poster} videoSource={videoSource} /> }
+                { videoSource.youtube &&
+                    <iframe className="w-full md:w-4/5 h-4/5 max-h-screen rounded-md bg-neutral-900"
+                        src={videoSource.video} title="YouTube video player" frameborder="0" allowfullscreen
+                        allow="accelerometer;autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    ></iframe>
+                }
             </Modal>
         );
     } else return (

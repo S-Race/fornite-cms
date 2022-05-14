@@ -6,8 +6,8 @@ const Loader = ({ text }) => {
     const container = useRef();
 
     useEffect(() => {
-        container.current.style.setProperty("--bg-color-init", "rgb(37, 99, 235)");
-        container.current.style.setProperty("--bg-color-end", "rgb(29, 78, 216)");
+        container.current.style.setProperty("--bg-color-init", "rgb(250, 204, 21)");
+        container.current.style.setProperty("--bg-color-end", "rgb(234, 179, 8)");
         let dots = Array.from(container.current.lastChild.childNodes);
         let secs = 0;
         dots.forEach(dot => {
