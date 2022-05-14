@@ -2,11 +2,14 @@ import { useState } from "react";
 
 import VideoDialog from "./VideoDialog";
 
-const VideoItem = ({ metadata: { name, poster, _id } }) => {
+const VideoItem = ({ metadata: { name, poster, _id, kills, placement, mode }, noLimit }) => {
     const [showVideo, setShowVideo] = useState(false);
+    const MODES = ["Unknown", "Solo", "Duo", "Trio", "Squad"];
 
     return (
-        <div className="w-3/4 md:w-1/2 mx-auto my-8 lg:w-1/4 rounded-lg cursor-pointer" key={_id}>
+        <div title={name}
+            className={"my-8 rounded-lg cursor-pointer " + (!noLimit ? "w-3/4 md:w-1/2 mx-auto lg:w-1/4": "mx-8")}
+            key={_id}>
             { showVideo && <VideoDialog video={_id} start={showVideo} poster={poster} name={name}
                 onClose={() => setShowVideo(false)}/> }
             <div className="relative group hover:scale-105 ease-in duration-300 overflow-x">
@@ -28,7 +31,12 @@ const VideoItem = ({ metadata: { name, poster, _id } }) => {
                         </button>
                 </div>
             </div>
-            <span className="block mt-4 px-2 truncate">{name}</span>
+            <div>
+                <span className="text-lg block mt-2 px-2 truncate">{name}</span>
+                <span className="text-sm px-2 text-neutral-400">kills: {kills}</span>
+                <span className="text-sm px-2 text-neutral-400">placed: {placement}</span>
+                <span className="text-sm px-2 text-neutral-400 font-semibold">{MODES[mode]}</span>
+            </div>
         </div>
     );
 }
