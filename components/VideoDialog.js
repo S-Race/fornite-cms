@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { requestSync } from "../hooks/Fetch";
 import Modal from "./Modal";
+import Loader from "./Loader";
 
 const VideoDialog = ({ video, start, poster, onClose }) => {
     const videoElement = useRef();
@@ -43,7 +44,7 @@ const VideoDialog = ({ video, start, poster, onClose }) => {
         return removeListeners; // clean up
     }, [videoElement.current]);
 
-    if (start && videoSource?.video?.length > 0)
+    if (start && videoSource?.video?.length > 0) {
         return (
             <Modal onClose={() => onClose(false)} center>
                 <video poster={poster} autoPlay controls ref={videoElement}
@@ -55,6 +56,13 @@ const VideoDialog = ({ video, start, poster, onClose }) => {
                 </video>
             </Modal>
         );
+    } else return (
+        <Modal onClose={() => onClose(false)} center>
+            <div className="w-full md:w-4/5 h-4/5 rounded-md bg-neutral-900 flex items-center justify-center">
+                <Loader/>
+            </div>
+        </Modal>
+    )
 };
 
 export default VideoDialog;
