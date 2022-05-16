@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import VideoDialog from "./VideoDialog";
 
-const VideoItem = ({ metadata: { name, poster, _id, kills, placement, mode }, noLimit }) => {
+const VideoItem = ({ metadata: { name, poster, _id, kills, placement, mode, player, squadMembers }, noLimit }) => {
     const [showVideo, setShowVideo] = useState(false);
     const MODES = ["Unknown", "Solo", "Duo", "Trio", "Squad"];
 
@@ -33,9 +33,12 @@ const VideoItem = ({ metadata: { name, poster, _id, kills, placement, mode }, no
             </div>
             <div>
                 <span className="text-lg block mt-2 px-2 truncate">{name}</span>
+                <span className="text-sm block px-2 text-neutral-400 font-semibold">{player?.username}</span>
                 <span className="text-sm px-2 text-neutral-400">kills: {kills}</span>
                 <span className="text-sm px-2 text-neutral-400">placed: {placement}</span>
                 <span className="text-sm px-2 text-neutral-400 font-semibold">{MODES[mode]}</span>
+                { squadMembers.map(s =>
+                    <span className="text-sm block px-2 text-neutral-400 font-semibold">{s?.username}</span>) }
             </div>
         </div>
     );

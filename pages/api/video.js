@@ -12,7 +12,7 @@ const findOrCreateUser = async (username) => {
             throw new Error("Failed to create player");
     }
 
-    return player.id;
+    return player[0]._id;
 };
 
 const addVideo = async (req, res) => {
@@ -34,7 +34,7 @@ const addVideo = async (req, res) => {
     let playerId = await findOrCreateUser(player);
     const uploadDate = (new Date(Date.now()));
 
-    const video = new Video({ url, name, poster, placement, kills, playerId, squadMembers, mode, uploadDate });
+    const video = new Video({ url, name, poster, placement, kills, player: playerId, squadMembers, mode, uploadDate });
     let savedVideo = video.save();
 
     if (savedVideo !== video)
@@ -59,7 +59,6 @@ const getVideoStream = async (req, res) => {
             youtube: true
         });
 
-    console.log("Not youtube");
     const { create: createYoutubeDl } = require("yt-dlp-exec");
     const ytdlp = createYoutubeDl("yt-dlp");
 

@@ -45,7 +45,10 @@ export async function getServerSideProps({ query: { position } }) {
     }
 
     createConnection();
-    const videos = await Video.find({ placement: { $lt: Number(position) + 1 }});
+    const videos = await Video
+        .find({ placement: { $lt: Number(position) + 1 }})
+        .populate({ path: "player", select: ["username", "avatar"] })
+        .populate({ path: "squadMembers", select: ["username", "avatar"] });
     if (!videos) return { props: { items: [] } };
 
     const items = JSON.parse(JSON.stringify(videos));
