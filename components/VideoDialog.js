@@ -62,7 +62,7 @@ const VideoDialog = ({ video, start, poster, onClose }) => {
                 { !videoSource.youtube && <VideoPlayer poster={poster} videoSource={videoSource} /> }
                 { videoSource.youtube &&
                     <iframe className="w-full md:w-4/5 h-4/5 max-h-screen rounded-md bg-neutral-900"
-                        src={videoSource.video} title="YouTube video player" frameborder="0" allowfullscreen
+                        src={videoSource.video} title="YouTube video player" frameBorder="0" allowFullScreen
                         allow="accelerometer;autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     ></iframe>
                 }

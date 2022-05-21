@@ -26,7 +26,7 @@ export default function Top({ items }) {
                 <Navbar/>
                 <main className="min-h-fit text-neutral-100">
                     <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                        { items?.map(item => <VideoItem metadata={item} noLimit/>) }
+                        { items?.map(item => <VideoItem key={item._id} metadata={item} noLimit/>) }
                     </section>
                 </main>
             </SearchProvider>
@@ -46,7 +46,7 @@ export async function getServerSideProps({ query: { position } }) {
 
     createConnection();
     const videos = await Video
-        .find({ placement: { $lt: Number(position) + 1 }})
+        .find({ placement: { $lt: Number(position) + 1 } })
         .populate({ path: "player", select: ["username", "avatar"] })
         .populate({ path: "squadMembers", select: ["username", "avatar"] });
     if (!videos) return { props: { items: [] } };

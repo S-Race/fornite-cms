@@ -16,19 +16,19 @@ const VideoItem = ({ metadata: { name, poster, _id, kills, placement, mode, play
                 <img src={poster} alt={name} className="rounded-lg h-full w-full"/>
                 <div className="group-hover:flex hidden h-full bg-stone-900/75 absolute bottom-0
                     w-full rounded-lg justify-center items-center">
-                        <button onClick={() => setShowVideo(true)}>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-20 w-20 block hover:text-yellow-400 cursor-pointer"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1
-                                    1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                        </button>
+                    <button onClick={() => setShowVideo(true)}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-20 w-20 block hover:text-yellow-400 cursor-pointer"
+                            viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1
+                                1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div>
@@ -38,7 +38,8 @@ const VideoItem = ({ metadata: { name, poster, _id, kills, placement, mode, play
                 <span className="text-sm px-2 text-neutral-400">placed: {placement}</span>
                 <span className="text-sm px-2 text-neutral-400 font-semibold">{MODES[mode]}</span>
                 { squadMembers.map(s =>
-                    <span className="text-sm block px-2 text-neutral-400 font-semibold">{s?.username}</span>) }
+                    <span key={s?._id}
+                        className="text-sm block px-2 text-neutral-400 font-semibold">{s?.username}</span>) }
             </div>
         </div>
     );

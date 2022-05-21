@@ -38,7 +38,7 @@ const addVideo = async (req, res) => {
     let savedVideo = video.save();
 
     if (savedVideo !== video)
-        return res.status(201).json({ msg: `Add video "${video.name}" successfully`});
+        return res.status(201).json({ msg: `Add video "${video.name}" successfully` });
     else return res.status(500).json({ msg: "An error occurred when trying to add video" });
 }
 
@@ -81,7 +81,7 @@ const getVideoStream = async (req, res) => {
     if (videoCandidates.length < 1)
         return res.status(400).send({ stream: "", msg: "can't get a video url with http protocol" });
 
-    for(let i = 1; i < videoCandidates.length; i++)
+    for (let i = 1; i < videoCandidates.length; i++)
         highest = videoCandidates[i].height > highest.height ? videoCandidates[i] : highest;
 
     // return res.status(200).json({ formats: json.formats });

@@ -33,7 +33,8 @@ const SelectInput = ({ label, value, update, name, choices }) => {
                 md:w-4/5 outline-none placeholder:text-stone-500 text-neutral-100 bg-stone-400
                 focus:border-green-400">{
                     choices.map(({ value, key }, i) => <option value={value} key={i}>{key}</option>)
-            }</select>
+                }
+            </select>
         </div>
     );
 };
@@ -94,12 +95,12 @@ const AddVideoDialog = ({ onClose }) => {
                     min={1} max={100}/>
                 <NumberInput label="Kills" value={video.kills} update={updateForm} name="kills" min={0} max={99}/>
                 <SelectInput label="Mode" value={video.mode} update={updateForm} name="mode" choices={modes}/>
-                { video.squad.map((squadMember, i) => (<div className="flex justify-between items-center">
-                        <TextInput key={i} label={"Squad Member " + (i + 1)} value={squadMember} update={updateForm}
-                            name={"sidekick" + i} placeholder={"sidekick " + (i + 1)} full/>
-                        <button onClick={deleteSquadMember} className="px-2 bg-red-500 hover:bg-red-600 rounded-sm
-                            h-fit ml-2 py-1" name={i}>Delete</button>
-                    </div>))
+                { video.squad.map((squadMember, i) => (<div key={i} className="flex justify-between items-center">
+                    <TextInput key={i} label={"Squad Member " + (i + 1)} value={squadMember} update={updateForm}
+                        name={"sidekick" + i} placeholder={"sidekick " + (i + 1)} full/>
+                    <button onClick={deleteSquadMember} className="px-2 bg-red-500 hover:bg-red-600 rounded-sm
+                        h-fit ml-2 py-1" name={i}>Delete</button>
+                </div>))
                 }
                 <footer className="flex justify-between mt-8">
                     <button onClick={addSquad} className="p-1 md:p-2 bg-green-400 hover:bg-green-500 rounded-md flex
